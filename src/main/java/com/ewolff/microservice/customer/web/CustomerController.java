@@ -23,6 +23,7 @@ import com.ewolff.microservice.customer.CustomerRepository;
 import java.io.*;
 
 @Controller
+@RequestMapping("customer")
 public class CustomerController {
 
 	private CustomerRepository customerRepository;
