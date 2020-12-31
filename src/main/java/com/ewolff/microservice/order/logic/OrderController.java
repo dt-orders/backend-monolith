@@ -26,7 +26,8 @@ import java.util.Date;
 
 import java.io.*;
 
-@Controller
+//RJAHN
+//@Controller
 class OrderController {
 
 	private OrderRepository orderRepository;

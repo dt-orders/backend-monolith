@@ -1,4 +1,4 @@
-package com.ewolff.microservice.customer;
+package com.ewolff.microservice.catalog;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +7,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 
 @Configuration
-class SpringRestDataConfig extends RepositoryRestConfigurerAdapter {
+class CatalogSpringRestDataConfig extends RepositoryRestConfigurerAdapter {
 
 	@Bean
 	public RepositoryRestConfigurer repositoryRestConfigurer() {
@@ -15,7 +15,7 @@ class SpringRestDataConfig extends RepositoryRestConfigurerAdapter {
 		return new RepositoryRestConfigurerAdapter() {
 			@Override
 			public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-				config.exposeIdsFor(Customer.class);
+				config.exposeIdsFor(Item.class);
 			}
 		};
 	}

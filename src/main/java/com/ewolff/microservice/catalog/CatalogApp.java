@@ -1,5 +1,7 @@
 package com.ewolff.microservice.catalog;
 
+//RJAHN
+/*
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +30,9 @@ public class CatalogApp {
 		itemRepository.save(new Item("Apple TV", 100.0));
 	}
 
-	public static void main(String[] args) {
-		SpringApplication.run(CatalogApp.class, args);
-	}
+	//public static void main(String[] args) {
+	//	SpringApplication.run(CatalogApp.class, args);
+	//}
 
 }
+*/

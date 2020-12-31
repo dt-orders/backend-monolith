@@ -18,7 +18,8 @@ import com.ewolff.microservice.catalog.ItemRepository;
 
 import java.io.*;
 
-@Controller
+//RJAHN
+//@Controller
 public class CatalogController {
 
 	private final ItemRepository itemRepository;

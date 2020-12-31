@@ -1,7 +1,11 @@
-package com.ewolff.microservice.customer;
+package com.ewolff.microservice;
 
 //RJAHN
-/*
+import com.ewolff.microservice.customer.Customer;
+import com.ewolff.microservice.customer.CustomerRepository;
+import com.ewolff.microservice.catalog.Item;
+import com.ewolff.microservice.catalog.ItemRepository;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +30,36 @@ import org.json.simple.parser.*;
 import java.io.IOException;
 import java.util.Iterator;
 
+//RJAHN
+//this was in the OrderApp, but the other two Apps used @EnableAutoConfiguration
+//import org.springframework.boot.autoconfigure.SpringBootApplication;
+//@SpringBootApplication
+
 @ComponentScan
 @EnableAutoConfiguration
 @Component
-public class CustomerApp {
+public class BackendApp {
 
 	private final CustomerRepository customerRepository;
+	private final ItemRepository itemRepository;
 
 	@Autowired
-	public CustomerApp(CustomerRepository customerRepository) {
+	public BackendApp(CustomerRepository customerRepository, ItemRepository itemRepository) {
 		this.customerRepository = customerRepository;
+		this.itemRepository = itemRepository;
+
 	}
 
 	@PostConstruct
 	public void generateTestData() {
+
+		// Catalog Data
+		itemRepository.save(new Item("iPod", 42.0));
+		itemRepository.save(new Item("iPod touch", 21.0));
+		itemRepository.save(new Item("iPod nano", 1.0));
+		itemRepository.save(new Item("Apple TV", 100.0));
+
+		// Customer Data
         CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
         	for (int it=0; it< 100; it++) {
@@ -94,10 +114,8 @@ public class CustomerApp {
         }
 	}
 
-	//public static void main(String[] args) {
-	//	SpringApplication.run(CustomerApp.class, args);
-	//}
+	public static void main(String[] args) {
+		SpringApplication.run(BackendApp.class, args);
+	}
 
 }
-
-*/
