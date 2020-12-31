@@ -27,7 +27,7 @@ class OrderService {
 			throw new IllegalArgumentException("No order lines!");
 		}
 		if (!customerClient.isValidCustomerId(order.getCustomerId())) {
-			throw new IllegalArgumentException("Customer does not exist!");
+			throw new IllegalArgumentException("Customer does not exist! Customer id = " + order.getCustomerId());
 		}
 		return orderRepository.save(order);
 	}

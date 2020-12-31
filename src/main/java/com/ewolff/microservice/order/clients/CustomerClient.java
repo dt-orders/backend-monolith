@@ -36,7 +36,7 @@ public class CustomerClient {
 
 	@Autowired
 	// to override port, set the environment variable
-	public CustomerClient(@Value("${CUSTOMER_SERVICE_DOMAIN:customer}")  String customerServiceHost, @Value("${CUSTOMER_SERVICE_PORT:80}") long customerServicePort) {
+	public CustomerClient(@Value("${CUSTOMER_SERVICE_DOMAIN:localhost}")  String customerServiceHost, @Value("${CUSTOMER_SERVICE_PORT:8080}") long customerServicePort) {
 		super();
 		this.restTemplate = getRestTemplate();
 		this.customerServiceHost = customerServiceHost;
