@@ -34,7 +34,7 @@ public class CatalogClient {
 
 	@Autowired
 	// to override port, set the environment variable 
-	public CatalogClient(@Value("${CATALOG_SERVICE_DOMAIN:catalog}") String catalogServiceHost, @Value("${CATALOG_SERVICE_PORT:80}") long catalogServicePort) {
+	public CatalogClient(@Value("${CATALOG_SERVICE_DOMAIN:localhost}") String catalogServiceHost, @Value("${CATALOG_SERVICE_PORT:8080}") long catalogServicePort) {
 		super();
 		this.restTemplate = getRestTemplate();
 		this.catalogServiceHost = catalogServiceHost;
