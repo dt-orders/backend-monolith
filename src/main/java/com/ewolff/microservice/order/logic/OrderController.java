@@ -82,6 +82,12 @@ class OrderController {
 	}
 
 	@RequestMapping("/")
+	public ModelAndView orderHome() {
+		return new ModelAndView("orderlist", "orders",
+				orderRepository.findAll());
+	}
+
+	@RequestMapping("/list.html")
 	public ModelAndView orderList() {
 		return new ModelAndView("orderlist", "orders",
 				orderRepository.findAll());
@@ -106,14 +112,14 @@ class OrderController {
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ModelAndView post(Order order) {
 		order = orderService.order(order);
-		return new ModelAndView("success");
+		return new ModelAndView("orderSuccess");
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ModelAndView post(@PathVariable("id") long id) {
 		orderRepository.deleteById(id);
 
-		return new ModelAndView("success");
+		return new ModelAndView("orderSuccess");
 	}
 
 	@RequestMapping(value = "/version", method = RequestMethod.GET)

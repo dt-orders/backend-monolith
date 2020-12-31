@@ -47,14 +47,14 @@ public class CatalogController {
 	@RequestMapping(value = "/form.html", method = RequestMethod.POST)
 	public ModelAndView post(Item Item) {
 		Item = itemRepository.save(Item);
-		return new ModelAndView("success");
+		return new ModelAndView("itemSuccess");
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.PUT)
 	public ModelAndView put(@PathVariable("id") long id, Item item) {
 		item.setId(id);
 		itemRepository.save(item);
-		return new ModelAndView("success");
+		return new ModelAndView("itemSuccess");
 	}
 
 	@RequestMapping(value = "/searchForm.html", produces = MediaType.TEXT_HTML_VALUE)
@@ -71,7 +71,7 @@ public class CatalogController {
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.DELETE)
 	public ModelAndView delete(@PathVariable("id") long id) {
 		itemRepository.deleteById(id);
-		return new ModelAndView("success");
+		return new ModelAndView("itemSuccess");
 	}
 
 	@RequestMapping(value = "/version", method = RequestMethod.GET)

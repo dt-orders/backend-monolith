@@ -74,7 +74,7 @@ public class CustomerController {
 	@RequestMapping(value = "/form.html", method = RequestMethod.POST)
 	public ModelAndView post(Customer customer, HttpServletRequest httpRequest) {
 		customer = customerRepository.save(customer);
-		return new ModelAndView("success");
+		return new ModelAndView("customerSuccess");
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.PUT)
@@ -82,13 +82,13 @@ public class CustomerController {
 			HttpServletRequest httpRequest) {
 		customer.setId(id);
 		customerRepository.save(customer);
-		return new ModelAndView("success");
+		return new ModelAndView("customerSuccess");
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.DELETE)
 	public ModelAndView delete(@PathVariable("id") long id) {
 		customerRepository.deleteById(id);
-		return new ModelAndView("success");
+		return new ModelAndView("customerSuccess");
 	}
 
    @RequestMapping(value = "/version", method = RequestMethod.GET)

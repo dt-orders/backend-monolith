@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-      layout:decorator="layout">
+      layout:decorator="orderLayout">
 <head>
     <title>Order : Add</title>
 </head>
@@ -9,12 +9,17 @@
 <h1 layout:fragment="header">Order : Add</h1>
 <div layout:fragment="content" class="container">
     <form action="." th:object="${order}" method="post" role="form">
+        <!--
+            th:value="${customer.customerId}" value="42" >Rod Johnson</option>
+            th:text="${customer.customerId}"
+            th:text="${customer.firstname}+' '+${customer.name}+' (+${customer.customerId}.toString()+')'"
+        -->
         <div class="form-group">
             <label for="selectCustomer">Customer</label> <select
                 name="selectCustomer" th:field="*{customerId}">
             <option th:each="customer : ${customers}"
                     th:text="${customer.firstname}+' '+${customer.name}"
-                    th:value="${customer.customerId}" value="42" >Rod Johnson</option>
+                    th:value="${customer.customerId}" value="${customer.customerId}" >Rod Johnson</option>
         </select>
         </div>
         <div class="row">
