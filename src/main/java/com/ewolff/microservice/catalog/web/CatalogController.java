@@ -59,7 +59,7 @@ public class CatalogController {
 
 	@RequestMapping(value = "/searchForm.html", produces = MediaType.TEXT_HTML_VALUE)
 	public ModelAndView searchForm() {
-		return new ModelAndView("searchForm");
+		return new ModelAndView("itemSearchForm");
 	}
 
 	@RequestMapping(value = "/searchByName.html", produces = MediaType.TEXT_HTML_VALUE)
