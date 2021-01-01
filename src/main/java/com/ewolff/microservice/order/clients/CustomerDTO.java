@@ -34,7 +34,7 @@ public class CustomerDTO extends ResourceSupport {
 	}
 
 	public long getCustomerId() {
-		return customerId;
+		return this.customerId;
 	}
 
 	public void setCustomerId(long id) {

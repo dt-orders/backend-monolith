@@ -4,9 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.EmbeddedId;
 import javax.validation.constraints.Email;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -18,9 +17,6 @@ public class Customer {
 	@Id
 	@GeneratedValue
 	private Long id;
-
-	@JsonProperty("fakeId")
-	private Long fakeId;
 
 	@Column(nullable = false)
 	private String name;
@@ -77,11 +73,11 @@ public class Customer {
 		this.firstname = firstname;
 	}
 
-	public Long getFakeId() {
+	public Long getId() {
 		return id;
 	}
 
-	public Long getId() {
+	public Long getCustomerId() {
 		return id;
 	}
 
