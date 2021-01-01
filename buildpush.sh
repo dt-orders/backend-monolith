@@ -1,23 +1,29 @@
 #!/bin/bash
 
 clear
-#if [ $# -lt 2 ]
-#then
-#  echo "missing arguments. Expect ./buildpush.sh <REPOSITORY> <VERSION_TAG>"
-#  echo "example:   ./buildpush.sh dtdemos 1"
-#  exit 1
-#fi
-#REPOSITORY=$1
-#VERSION_TAG=$2
-REPOSITORY=dtdemos
-VERSION_TAG=1
+
+REPOSITORY=$1
+VERSION_TAG=$2
+
+if [ -z "$REPOSITORY" ]
+then
+    REPOSITORY=dtdemos
+fi
+
+if [ -z "$VERSION_TAG" ]
+then
+    VERSION_TAG=1
+fi
 
 IMAGE=dt-orders-backend-monolith
 FULLIMAGE=$REPOSITORY/$IMAGE:$VERSION_TAG
 
+echo ""
+echo "========================================================"
+echo "Building $FULLIMAGE"
+echo "========================================================"
 #./mvnw clean package
 ./mvnw clean package -Dmaven.test.skip=true
-
 docker build -t $FULLIMAGE .
 
 echo ""
