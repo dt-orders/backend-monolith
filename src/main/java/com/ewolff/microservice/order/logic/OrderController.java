@@ -17,9 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ewolff.microservice.order.clients.CatalogClient;
-import com.ewolff.microservice.order.clients.Customer;
+import com.ewolff.microservice.order.clients.CustomerDTO;
 import com.ewolff.microservice.order.clients.CustomerClient;
-import com.ewolff.microservice.order.clients.Item;
+import com.ewolff.microservice.order.clients.ItemDTO;
 
 import java.util.Calendar;
 import java.util.Date; 
@@ -49,25 +49,25 @@ class OrderController {
 	}
 
 	@ModelAttribute("items")
-	public Collection<Item> items() {
+	public Collection<ItemDTO> items() {
 		return catalogClient.findAll();
 	}
 
 	@ModelAttribute("customers")
-	public Collection<Customer> customers() {
+	public Collection<CustomerDTO> customers() {
 
 		System.out.println("APP_VERSION: " + System.getenv("APP_VERSION"));
 		if (System.getenv("APP_VERSION").equals("2")) {
 			System.out.println("N+1 problem = ON");
-			Collection<Customer> allCustomers = customerClient.findAll();
+			Collection<CustomerDTO> allCustomers = customerClient.findAll();
 			// ************************************************
 			// N+1 Problem
 			// Add additional lookups for each customer
 			// this will cause additional SQL calls
 			// ************************************************
-			Iterator<Customer> itr = allCustomers.iterator();
+			Iterator<CustomerDTO> itr = allCustomers.iterator();
 			while (itr.hasNext()) {
-				Customer cust = itr.next();
+				CustomerDTO cust = itr.next();
 				long id = cust.getCustomerId();
 				for(int i=1; i<=20; i++){
 					customerClient.getOne(id);

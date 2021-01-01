@@ -7,7 +7,7 @@ import org.springframework.hateoas.ResourceSupport;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Item extends ResourceSupport {
+public class ItemDTO extends ResourceSupport {
 
 	private String name;
 
@@ -16,11 +16,11 @@ public class Item extends ResourceSupport {
 	@JsonProperty("id")
 	private long itemId;
 
-	public Item() {
+	public ItemDTO() {
 		super();
 	}
 
-	public Item(long id, String name, double price) {
+	public ItemDTO(long id, String name, double price) {
 		super();
 		this.itemId = id;
 		this.name = name;
