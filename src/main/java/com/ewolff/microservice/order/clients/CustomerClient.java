@@ -30,13 +30,13 @@ public class CustomerClient {
 	private String customerServiceHost;
 	private long customerServicePort;
 
-	static class CustomerPagedResources extends PagedResources<Customer> {
+	static class CustomerPagedResources extends PagedResources<CustomerDTO> {
 
 	}
 
 	@Autowired
 	// to override port, set the environment variable
-	public CustomerClient(@Value("${CUSTOMER_SERVICE_DOMAIN:localhost}")  String customerServiceHost, @Value("${CUSTOMER_SERVICE_PORT:8080}") long customerServicePort) {
+	public CustomerClient(@Value("${CUSTOMER_SERVICE_DOMAIN:customer}")  String customerServiceHost, @Value("${CUSTOMER_SERVICE_PORT:8080}") long customerServicePort) {
 		super();
 		this.restTemplate = getRestTemplate();
 		this.customerServiceHost = customerServiceHost;
@@ -68,8 +68,8 @@ public class CustomerClient {
 		return new RestTemplate(Collections.<HttpMessageConverter<?>>singletonList(converter));
 	}
 
-	public Collection<Customer> findAll() {
-		PagedResources<Customer> pagedResources = getRestTemplate().getForObject(customerURL(),
+	public Collection<CustomerDTO> findAll() {
+		PagedResources<CustomerDTO> pagedResources = getRestTemplate().getForObject(customerURL(),
 				CustomerPagedResources.class);
 		return pagedResources.getContent();
 	}
@@ -81,7 +81,7 @@ public class CustomerClient {
 
 	}
 
-	public Customer getOne(long customerId) {
-		return restTemplate.getForObject(customerURL() + customerId, Customer.class);
+	public CustomerDTO getOne(long customerId) {
+		return restTemplate.getForObject(customerURL() + customerId, CustomerDTO.class);
 	}
 }

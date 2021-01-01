@@ -30,11 +30,6 @@ import org.json.simple.parser.*;
 import java.io.IOException;
 import java.util.Iterator;
 
-//RJAHN
-//this was in the OrderApp, but the other two Apps used @EnableAutoConfiguration
-//import org.springframework.boot.autoconfigure.SpringBootApplication;
-//@SpringBootApplication
-
 @ComponentScan
 @EnableAutoConfiguration
 @Component
@@ -62,8 +57,8 @@ public class BackendApp {
 		// Customer Data
         CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
-        	for (int it=0; it< 10; it++) {
-	            HttpGet httpget = new HttpGet("https://randomuser.me/api/");
+        	for (int it=1; it<= 20; it++) {
+	            HttpGet httpget = new HttpGet("https://randomuser.me/api/?nat=us");
 	
 	            //System.out.println("Executing request " + httpget.getRequestLine());
 	
@@ -78,28 +73,38 @@ public class BackendApp {
 	                        HttpEntity entity = response.getEntity();
 	                        return entity != null ? EntityUtils.toString(entity) : null;
 	                    } else {
-	                        throw new ClientProtocolException("Unexpected response status: " + status);
+	                        // sometimes get unicode data for a customer that causes errors
+							//throw new ClientProtocolException("Unexpected response status: " + status);
+							System.out.println("Unexpected response status: " + status);
+							return null;
 	                    }
 	                }
 	
 	            };
-	            String responseBody = httpclient.execute(httpget, responseHandler);
-	        		JSONParser parser = new JSONParser();
-	        		JSONObject obj = (JSONObject) parser.parse(responseBody);
-	        		JSONArray result = (JSONArray) obj.get("results");
-	        		Iterator i = result.iterator();
-	        		while (i.hasNext()) {
-	        			JSONObject user = (JSONObject) i.next();
-	        			JSONObject name = (JSONObject) user.get("name");
-	        			String fName = ((String)name.get("first"));
-	        			String lName = ((String)name.get("last"));
+
+				String responseBody = httpclient.execute(httpget, responseHandler);
+				if (responseBody != null) {
+					System.out.println("Adding customer: " + it);
+					JSONParser parser = new JSONParser();
+					JSONObject obj = (JSONObject) parser.parse(responseBody);
+					JSONArray result = (JSONArray) obj.get("results");
+					Iterator i = result.iterator();
+					while (i.hasNext()) {
+						JSONObject user = (JSONObject) i.next();
+						JSONObject name = (JSONObject) user.get("name");
+						String fName = ((String)name.get("first"));
+						String lName = ((String)name.get("last"));
 						JSONObject address = (JSONObject) user.get("location");
 						String street = address.get("street").toString();
 						String city = address.get("city").toString();
-	        			System.out.println(fName + " " +lName + " " + fName + "." + lName + "@gmail.com" + " " + street + " " + city);
-						customerRepository.save(new Customer(fName, lName,"aa@gmail.com", street, city));
-	        		}
-	        	}
+						System.out.println("fName: " + fName + " , lName: " +lName + " ,email: " + fName + "." + lName + "@gmail.com" + " ,street: " + street + " ,city:" + city);
+						customerRepository.save(new Customer(fName, lName, "aa@gmail.com", street, city));
+					}
+				}
+				else {
+					System.out.println("Skipping customer: " + it);
+				}
+			}
         }
         	catch (Exception e) {
         		e.printStackTrace();

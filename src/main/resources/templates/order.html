@@ -16,7 +16,7 @@
 		</div>
 		<div class="row">
 			<div class="col-md-2">Total price</div>
-			<!--<div class="col-md-2" th:text="${order.totalPrice(@catalogClient)}"></div>-->
+			<div class="col-md-2" th:text="${order.totalPrice(@catalogClient)}"></div>
 			<div class="col-md-2">TBD</div>
 		</div>
 
@@ -34,8 +34,8 @@
 
 		<div class="row" th:each="orderLine : ${order.orderLine}">
 			<div class="col-md-2" th:text="${orderLine.count}"></div>
-			<!--<div class="col-md-2" th:text="${@catalogClient.getOne(orderLine.itemId).name}"></div>
-			<div class="col-md-2" th:text="${@catalogClient.getOne(orderLine.itemId).price}"></div>-->
+			<div class="col-md-2" th:text="${@catalogClient.getOne(orderLine.itemId).name}"></div>
+			<div class="col-md-2" th:text="${@catalogClient.getOne(orderLine.itemId).price}"></div>
 			<div class="col-md-2">TBD</div>
 			<div class="col-md-2">TBD</div>
 		</div>

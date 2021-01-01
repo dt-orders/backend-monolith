@@ -5,9 +5,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.hateoas.ResourceSupport;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-public class Customer extends ResourceSupport {
+public class CustomerDTO extends ResourceSupport {
 
 	private String name;
 
@@ -19,13 +17,12 @@ public class Customer extends ResourceSupport {
 
 	private String city;
 
-	@JsonProperty("id")
 	private long customerId;
 
-	public Customer() {
+	public CustomerDTO() {
 	}
 
-	public Customer(long id, String firstname, String name, String email,
+	public CustomerDTO(long id, String firstname, String name, String email,
 			String street, String city) {
 		super();
 		this.customerId = id;

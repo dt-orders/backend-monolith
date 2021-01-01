@@ -12,14 +12,14 @@
         <!--
             th:value="${customer.customerId}" value="42" >Rod Johnson</option>
             th:text="${customer.customerId}"
-            th:text="${customer.firstname}+' '+${customer.name}+' (+${customer.customerId}.toString()+')'"
+            th:text="${customer.firstname}+' '+${customer.name}+' ('+${#strings.toString(customer.customerId)}"
         -->
         <div class="form-group">
             <label for="selectCustomer">Customer</label> <select
                 name="selectCustomer" th:field="*{customerId}">
             <option th:each="customer : ${customers}"
                     th:text="${customer.firstname}+' '+${customer.name}"
-                    th:value="${customer.customerId}" value="${customer.customerId}" >Rod Johnson</option>
+                    th:value="${customer.customerId}" value="42" >Rod Johnson</option>
         </select>
         </div>
         <div class="row">

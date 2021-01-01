@@ -24,7 +24,7 @@ public class CatalogClient {
 
 	private final Logger log = LoggerFactory.getLogger(CatalogClient.class);
 
-	public static class ItemPagedResources extends PagedResources<Item> {
+	public static class ItemPagedResources extends PagedResources<ItemDTO> {
 
 	}
 
@@ -34,7 +34,7 @@ public class CatalogClient {
 
 	@Autowired
 	// to override port, set the environment variable 
-	public CatalogClient(@Value("${CATALOG_SERVICE_DOMAIN:localhost}") String catalogServiceHost, @Value("${CATALOG_SERVICE_PORT:8080}") long catalogServicePort) {
+	public CatalogClient(@Value("${CATALOG_SERVICE_DOMAIN:catalog}") String catalogServiceHost, @Value("${CATALOG_SERVICE_PORT:8080}") long catalogServicePort) {
 		super();
 		this.restTemplate = getRestTemplate();
 		this.catalogServiceHost = catalogServiceHost;
@@ -57,8 +57,8 @@ public class CatalogClient {
 		return getOne(itemId).getPrice();
 	}
 
-	public Collection<Item> findAll() {
-		PagedResources<Item> pagedResources = restTemplate.getForObject(catalogURL(), ItemPagedResources.class);
+	public Collection<ItemDTO> findAll() {
+		PagedResources<ItemDTO> pagedResources = restTemplate.getForObject(catalogURL(), ItemPagedResources.class);
 		return pagedResources.getContent();
 	}
 
@@ -68,7 +68,7 @@ public class CatalogClient {
 		return url;
 	}
 
-	public Item getOne(long itemId) {
-		return restTemplate.getForObject(catalogURL() + itemId, Item.class);
+	public ItemDTO getOne(long itemId) {
+		return restTemplate.getForObject(catalogURL() + itemId, ItemDTO.class);
 	}
 }
