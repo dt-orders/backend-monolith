@@ -78,7 +78,6 @@ public class CustomerClient {
 		String url = String.format("http://%s:%s/customer/", customerServiceHost, customerServicePort);
 		log.trace("Customer: URL {} ", url);
 		return url;
-
 	}
 
 	public CustomerDTO getOne(long customerId) {

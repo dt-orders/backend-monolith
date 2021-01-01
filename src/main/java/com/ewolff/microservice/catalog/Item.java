@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -16,9 +15,6 @@ public class Item {
 	@Id
 	@GeneratedValue
 	private Long id;
-
-	@JsonProperty("fakeId")
-	private Long fakeId;
 
 	@Column(nullable = false)
 	private String name;
@@ -53,10 +49,6 @@ public class Item {
 		this.price = price;
 	}
 
-	public Long getFakeId() {
-		return id;
-	}
-	
 	public Long getId() {
 		return id;
 	}
