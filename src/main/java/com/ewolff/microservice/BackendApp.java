@@ -57,7 +57,7 @@ public class BackendApp {
 		// Customer Data
         CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
-        	for (int it=1; it<= 20; it++) {
+        	for (int it=1; it<= 100; it++) {
 	            HttpGet httpget = new HttpGet("https://randomuser.me/api/?nat=us");
 	
 	            //System.out.println("Executing request " + httpget.getRequestLine());
