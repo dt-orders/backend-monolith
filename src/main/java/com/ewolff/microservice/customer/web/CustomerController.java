@@ -26,11 +26,24 @@ import java.io.*;
 @RequestMapping("customer")
 public class CustomerController {
 
+	private String version;
+
 	private CustomerRepository customerRepository;
+
+	private String getVersion() {
+		System.out.println("Current APP_VERSION: " + this.version);
+		return this.version;
+	}
+
+	private void setVersion(String newVersion) {
+		this.version = newVersion;
+		System.out.println("Setting APP_VERSION to: " + this.version);
+	}
 
 	@Autowired
 	public CustomerController(CustomerRepository customerRepository) {
 		this.customerRepository = customerRepository;
+		this.version = System.getenv("APP_VERSION");
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
@@ -42,8 +55,7 @@ public class CustomerController {
 	@RequestMapping("/list.html")
 	public ModelAndView customerList() {
 
-		System.out.println("APP_VERSION: " + System.getenv("APP_VERSION"));
-		if (System.getenv("APP_VERSION").equals("2")) {
+		if (this.getVersion().equals("2")) {
 			System.out.println("Response Time problem = ON");
 			try
 			{
@@ -93,16 +105,22 @@ public class CustomerController {
 
    @RequestMapping(value = "/version", method = RequestMethod.GET)
    @ResponseBody
-   public String getVersion() {
+   public String showVersion() {
 		String version;
 		try {
-			version = System.getenv("APP_VERSION");
+			version = this.getVersion();
 		}
 		catch(Exception e) {
 			version = "APP_VERSION not found";
 		}
 		return version;
    }
+
+	@RequestMapping(value = "setversion/{version}", method = RequestMethod.GET)
+	public ModelAndView webSetVersion(@PathVariable("version") String newVersion) {
+		this.setVersion(newVersion);
+		return new ModelAndView("customerSuccess");
+	}
 
    @RequestMapping(value = "/health", method = RequestMethod.GET)
    @ResponseBody

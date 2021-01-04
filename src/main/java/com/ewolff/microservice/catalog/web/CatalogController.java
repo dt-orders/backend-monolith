@@ -22,11 +22,24 @@ import java.io.*;
 @RequestMapping("catalog")
 public class CatalogController {
 
+	private String version;
+
 	private final ItemRepository itemRepository;
+
+	private String getVersion() {
+		System.out.println("Current APP_VERSION: " + this.version);
+		return this.version;
+	}
+
+	private void setVersion(String newVersion) {
+		this.version = newVersion;
+		System.out.println("Setting APP_VERSION to: " + this.version);
+	}
 
 	@Autowired
 	public CatalogController(ItemRepository itemRepository) {
 		this.itemRepository = itemRepository;
+		this.version = System.getenv("APP_VERSION");
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
@@ -74,19 +87,23 @@ public class CatalogController {
 		return new ModelAndView("itemSuccess");
 	}
 
-	@RequestMapping(value = "/version", method = RequestMethod.GET)
-	@ResponseBody
-	public String getVersion() {
-		 File file = new File("version"); 
-		 String version = "version not found";
-		 try {
-			 BufferedReader br = new BufferedReader(new FileReader(file));
-			 version = br.readLine();
-		 }
-		 catch(Exception e) {
-			 version = e.getMessage();
-		 }
-		 return version;
+   @RequestMapping(value = "/version", method = RequestMethod.GET)
+   @ResponseBody
+   public String showVersion() {
+		String version;
+		try {
+			version = this.getVersion();
+		}
+		catch(Exception e) {
+			version = "APP_VERSION not found";
+		}
+		return version;
+   } 
+
+	@RequestMapping(value = "setversion/{version}", method = RequestMethod.GET)
+	public ModelAndView webSetVersion(@PathVariable("version") String newVersion) {
+		this.setVersion(newVersion);
+		return new ModelAndView("itemSuccess");
 	}
 	
 	@RequestMapping(value = "/health", method = RequestMethod.GET)

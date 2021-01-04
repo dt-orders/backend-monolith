@@ -5,6 +5,5 @@ COPY target/*.jar .
 ARG APP_VERSION=1
 ENV APP_VERSION=$APP_VERSION
 
-COPY version .
 CMD /usr/bin/java -Xmx400m -Xms400m -jar *.jar 
 EXPOSE 8080
