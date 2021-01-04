@@ -69,8 +69,7 @@ class OrderController {
 	@ModelAttribute("customers")
 	public Collection<CustomerDTO> customers() {
 
-		System.out.println("APP_VERSION: " + System.getenv("APP_VERSION"));
-		if (System.getenv("APP_VERSION").equals("2")) {
+		if (this.getVersion().equals("2")) {
 			System.out.println("N+1 problem = ON");
 			Collection<CustomerDTO> allCustomers = customerClient.findAll();
 			// ************************************************
