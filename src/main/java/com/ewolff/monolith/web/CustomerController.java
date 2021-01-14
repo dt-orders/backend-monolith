@@ -1,6 +1,4 @@
-package com.ewolff.microservice.customer.web;
-
-import java.lang.reflect.Field;
+package com.ewolff.monolith.web;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,13 +12,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Calendar;
-import java.util.Date; 
-import java.util.Map;
+import java.util.Date;
 
-import com.ewolff.microservice.customer.Customer;
-import com.ewolff.microservice.customer.CustomerRepository;
-
-import java.io.*;
+import com.ewolff.monolith.persistence.domain.Customer;
+import com.ewolff.monolith.persistence.repository.CustomerRepository;
 
 @Controller
 @RequestMapping("customer")

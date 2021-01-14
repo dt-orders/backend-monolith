@@ -1,12 +1,13 @@
-package com.ewolff.microservice.order.logic;
+package com.ewolff.monolith.web;
 
 import java.util.Collection;
-import java.util.Random;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Calendar;
-import java.util.Date; 
+import java.util.Date;
 
+import com.ewolff.monolith.persistence.domain.Order;
+import com.ewolff.monolith.persistence.repository.OrderRepository;
+import com.ewolff.monolith.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,14 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ewolff.microservice.order.clients.CatalogClient;
-import com.ewolff.microservice.order.clients.CustomerDTO;
+import com.ewolff.monolith.dto.CustomerDTO;
 import com.ewolff.microservice.order.clients.CustomerClient;
-import com.ewolff.microservice.order.clients.ItemDTO;
-
-import java.util.Calendar;
-import java.util.Date; 
-
-import java.io.*;
+import com.ewolff.monolith.dto.ItemDTO;
 
 @Controller
 @RequestMapping("order")

@@ -1,4 +1,4 @@
-package com.ewolff.microservice.order.clients;
+package com.ewolff.monolith.dto;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;

@@ -1,5 +1,7 @@
-package com.ewolff.microservice.order.logic;
+package com.ewolff.monolith.service;
 
+import com.ewolff.monolith.persistence.domain.Order;
+import com.ewolff.monolith.persistence.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,7 +9,7 @@ import com.ewolff.microservice.order.clients.CatalogClient;
 import com.ewolff.microservice.order.clients.CustomerClient;
 
 @Service
-class OrderService {
+public class OrderService {
 
 	private OrderRepository orderRepository;
 	private CustomerClient customerClient;

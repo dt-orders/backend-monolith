@@ -1,10 +1,10 @@
-package com.ewolff.microservice;
+package com.ewolff.monolith;
 
 //RJAHN
-import com.ewolff.microservice.customer.Customer;
-import com.ewolff.microservice.customer.CustomerRepository;
-import com.ewolff.microservice.catalog.Item;
-import com.ewolff.microservice.catalog.ItemRepository;
+import com.ewolff.monolith.persistence.domain.Customer;
+import com.ewolff.monolith.persistence.repository.CustomerRepository;
+import com.ewolff.monolith.persistence.domain.Item;
+import com.ewolff.monolith.persistence.repository.ItemRepository;
 
 import javax.annotation.PostConstruct;
 

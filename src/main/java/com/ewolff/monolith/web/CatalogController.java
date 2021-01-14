@@ -1,4 +1,4 @@
-package com.ewolff.microservice.catalog.web;
+package com.ewolff.monolith.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Calendar;
 import java.util.Date; 
 
-import com.ewolff.microservice.catalog.Item;
-import com.ewolff.microservice.catalog.ItemRepository;
-
-import java.io.*;
+import com.ewolff.monolith.persistence.domain.Item;
+import com.ewolff.monolith.persistence.repository.ItemRepository;
 
 @Controller
 @RequestMapping("catalog")

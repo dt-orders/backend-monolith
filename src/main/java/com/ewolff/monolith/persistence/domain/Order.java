@@ -1,4 +1,4 @@
-package com.ewolff.microservice.order.logic;
+package com.ewolff.monolith.persistence.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import com.ewolff.microservice.order.clients.CatalogClient;
 
 @Entity
 @Table(name = "ORDERTABLE")
-class Order {
+public class Order {
 
 	@Id
 	@GeneratedValue
