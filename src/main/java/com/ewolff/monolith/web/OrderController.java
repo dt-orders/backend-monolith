@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ewolff.microservice.order.clients.CatalogClient;
+import com.ewolff.monolith.web.clients.CatalogClient;
 import com.ewolff.monolith.dto.CustomerDTO;
-import com.ewolff.microservice.order.clients.CustomerClient;
+import com.ewolff.monolith.web.clients.CustomerClient;
 import com.ewolff.monolith.dto.ItemDTO;
 
 @Controller

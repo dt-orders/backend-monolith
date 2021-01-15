@@ -5,8 +5,8 @@ import com.ewolff.monolith.persistence.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ewolff.microservice.order.clients.CatalogClient;
-import com.ewolff.microservice.order.clients.CustomerClient;
+import com.ewolff.monolith.web.clients.CatalogClient;
+import com.ewolff.monolith.web.clients.CustomerClient;
 
 @Service
 public class OrderService {

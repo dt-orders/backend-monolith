@@ -1,4 +1,4 @@
-package com.ewolff.microservice.order.clients;
+package com.ewolff.monolith.web.clients;
 
 import java.util.Arrays;
 import java.util.Collection;
