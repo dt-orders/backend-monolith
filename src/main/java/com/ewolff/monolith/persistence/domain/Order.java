@@ -10,11 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.ewolff.monolith.service.CatalogService;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.ewolff.monolith.web.clients.CatalogClient;
 
 @Entity
 @Table(name = "ORDERTABLE")
@@ -72,9 +72,9 @@ public class Order {
 		return orderLine.size();
 	}
 
-	public double totalPrice(CatalogClient itemClient) {
+	public double totalPrice(CatalogService itemService) {
 		return orderLine.stream()
-				.map((ol) -> ol.getCount() * itemClient.price(ol.getItemId()))
+				.map((ol) -> ol.getCount() * itemService.price(ol.getItemId()))
 				.reduce(0.0, (d1, d2) -> d1 + d2);
 	}
 

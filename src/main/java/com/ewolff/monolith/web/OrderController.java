@@ -7,6 +7,8 @@ import java.util.Date;
 
 import com.ewolff.monolith.persistence.domain.Order;
 import com.ewolff.monolith.persistence.repository.OrderRepository;
+import com.ewolff.monolith.service.CatalogService;
+import com.ewolff.monolith.service.CustomerService;
 import com.ewolff.monolith.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ewolff.monolith.web.clients.CatalogClient;
 import com.ewolff.monolith.dto.CustomerDTO;
-import com.ewolff.monolith.web.clients.CustomerClient;
 import com.ewolff.monolith.dto.ItemDTO;
 
 @Controller
@@ -29,20 +29,19 @@ class OrderController {
 	private OrderRepository orderRepository;
 
 	private OrderService orderService;
-
-	private CustomerClient customerClient;
-	private CatalogClient catalogClient;
+	private CustomerService customerService;
+	private CatalogService catalogService;
 
 	private String version;
 
 	@Autowired
 	private OrderController(OrderService orderService,
-			OrderRepository orderRepository, CustomerClient customerClient,
-			CatalogClient catalogClient) {
+							OrderRepository orderRepository, CustomerService customerService,
+							CatalogService catalogService) {
 		super();
 		this.orderRepository = orderRepository;
-		this.customerClient = customerClient;
-		this.catalogClient = catalogClient;
+		this.customerService = customerService;
+		this.catalogService = catalogService;
 		this.orderService = orderService;
 		this.version = System.getenv("APP_VERSION");
 	}
@@ -59,7 +58,7 @@ class OrderController {
 
 	@ModelAttribute("items")
 	public Collection<ItemDTO> items() {
-		return catalogClient.findAll();
+		return catalogService.findAll();
 	}
 
 	@ModelAttribute("customers")
@@ -67,7 +66,7 @@ class OrderController {
 
 		if (this.getVersion().equals("2")) {
 			System.out.println("N+1 problem = ON");
-			Collection<CustomerDTO> allCustomers = customerClient.findAll();
+			Collection<CustomerDTO> allCustomers = customerService.findAll();
 			// ************************************************
 			// N+1 Problem
 			// Add additional lookups for each customer
@@ -78,14 +77,14 @@ class OrderController {
 				CustomerDTO cust = itr.next();
 				long id = cust.getCustomerId();
 				for(int i=1; i<=20; i++){
-					customerClient.getOne(id);
+					customerService.getOne(id);
 				}
 			}
 			return allCustomers;
 		}
 		else {
 			System.out.println("N+1 problem = OFF");
-			return customerClient.findAll();
+			return customerService.findAll();
 		}
 	}
 
@@ -108,7 +107,7 @@ class OrderController {
 
 	@RequestMapping(value = "/line", method = RequestMethod.POST)
 	public ModelAndView addLine(Order order) {
-		order.addLine(0, catalogClient.findAll().iterator().next().getItemId());
+		order.addLine(0, catalogService.findAll().iterator().next().getItemId());
 		return new ModelAndView("orderForm", "order", order);
 	}
 
