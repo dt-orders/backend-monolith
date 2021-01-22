@@ -2,6 +2,8 @@ package com.ewolff.monolith.web;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ewolff.monolith.dto.CustomerDTO;
+import com.ewolff.monolith.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -23,7 +25,7 @@ public class CustomerController {
 
 	private String version;
 
-	private CustomerRepository customerRepository;
+	private CustomerService customerService;
 
 	private String getVersion() {
 		System.out.println("Current APP_VERSION: " + this.version);
@@ -36,16 +38,11 @@ public class CustomerController {
 	}
 
 	@Autowired
-	public CustomerController(CustomerRepository customerRepository) {
-		this.customerRepository = customerRepository;
+	public CustomerController(CustomerService customerService) {
+		this.customerService = customerService;
 		this.version = System.getenv("APP_VERSION");
 	}
 
-	@RequestMapping(value = "/{id}.html", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-	public ModelAndView customer(@PathVariable("id") long id) {
-		return new ModelAndView("customer", "customer",
-				customerRepository.findById(id).get());
-	}
 
 	@RequestMapping("/list.html")
 	public ModelAndView customerList() {
@@ -64,37 +61,48 @@ public class CustomerController {
 			   Thread.currentThread().interrupt();
 			}
 			return new ModelAndView("customerlist", "customers",
-					customerRepository.findAll());
+//					customerRepository.findAll());
+					customerService.findAll());
 		}
 		else {
 			System.out.println("Response Time problem = OFF");
 			return new ModelAndView("customerlist", "customers",
-					customerRepository.findAll());
+					//customerRepository.findAll());
+					customerService.findAll());
 		}
 	}
 
 	@RequestMapping(value = "/form.html", method = RequestMethod.GET)
 	public ModelAndView add() {
-		return new ModelAndView("customer", "customer", new Customer());
+		return new ModelAndView("customer", "customer", new CustomerDTO());
 	}
 
 	@RequestMapping(value = "/form.html", method = RequestMethod.POST)
-	public ModelAndView post(Customer customer, HttpServletRequest httpRequest) {
-		customer = customerRepository.save(customer);
+	public ModelAndView post(CustomerDTO customer, HttpServletRequest httpRequest) {
+		System.out.println("Saving new customer " + customer.getCustomerId());
+		customer = customerService.save(customer);
 		return new ModelAndView("customerSuccess");
 	}
 
+	@RequestMapping(value = "/{id}.html", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+	public ModelAndView customer(@PathVariable("id") long id) {
+		return new ModelAndView("customer", "customer",
+				customerService.getOne(id));
+	}
+
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.PUT)
-	public ModelAndView put(@PathVariable("id") long id, Customer customer,
-			HttpServletRequest httpRequest) {
-		customer.setId(id);
-		customerRepository.save(customer);
+	public ModelAndView put(@PathVariable("id") long id, CustomerDTO customer,
+							HttpServletRequest httpRequest) {
+		customer.setCustomerId(id);
+		System.out.println("Updating customer " + customer.getCustomerId());
+		customerService.save(customer);
 		return new ModelAndView("customerSuccess");
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.DELETE)
 	public ModelAndView delete(@PathVariable("id") long id) {
-		customerRepository.deleteById(id);
+		System.out.println("Deleting customer " + id);
+		customerService.delete(id);
 		return new ModelAndView("customerSuccess");
 	}
 

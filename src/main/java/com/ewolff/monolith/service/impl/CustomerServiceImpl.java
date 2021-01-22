@@ -52,4 +52,23 @@ public class CustomerServiceImpl implements CustomerService {
         }
         return dto;
     }
+
+    @Override
+    public CustomerDTO save(CustomerDTO dto) {
+
+        Customer x = new Customer(dto.getFirstname(), dto.getName(), dto.getEmail(), dto.getStreet(),
+                dto.getCity());
+        x.setId(dto.getCustomerId());
+
+        Customer c = customerRepo.save(x);
+
+        return new CustomerDTO(c.getCustomerId(), c.getFirstname(), c.getName(), c.getEmail(), c.getStreet(), c.getCity());
+    }
+
+    @Override
+    public void delete(long id) {
+        if (customerRepo.findById(id) != null) {
+            customerRepo.deleteById(id);
+        }
+    }
 }

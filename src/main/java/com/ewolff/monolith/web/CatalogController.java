@@ -1,5 +1,7 @@
 package com.ewolff.monolith.web;
 
+import com.ewolff.monolith.dto.ItemDTO;
+import com.ewolff.monolith.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -21,8 +23,7 @@ import com.ewolff.monolith.persistence.repository.ItemRepository;
 public class CatalogController {
 
 	private String version;
-
-	private final ItemRepository itemRepository;
+	private final CatalogService catalogService;
 
 	private String getVersion() {
 		System.out.println("Current APP_VERSION: " + this.version);
@@ -35,36 +36,36 @@ public class CatalogController {
 	}
 
 	@Autowired
-	public CatalogController(ItemRepository itemRepository) {
-		this.itemRepository = itemRepository;
+	public CatalogController(CatalogService catalogService) {
+		this.catalogService = catalogService;
 		this.version = System.getenv("APP_VERSION");
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
 	public ModelAndView Item(@PathVariable("id") long id) {
-		return new ModelAndView("item", "item", itemRepository.findById(id).get());
+		return new ModelAndView("item", "item", catalogService.getOne(id));
 	}
 
 	@RequestMapping("/list.html")
 	public ModelAndView ItemList() {
-		return new ModelAndView("itemlist", "items", itemRepository.findAll());
+		return new ModelAndView("itemlist", "items", catalogService.findAll());
 	}
 
 	@RequestMapping(value = "/form.html", method = RequestMethod.GET)
 	public ModelAndView add() {
-		return new ModelAndView("item", "item", new Item());
+		return new ModelAndView("item", "item", new ItemDTO());
 	}
 
 	@RequestMapping(value = "/form.html", method = RequestMethod.POST)
-	public ModelAndView post(Item Item) {
-		Item = itemRepository.save(Item);
+	public ModelAndView post(ItemDTO item) {
+		item = catalogService.save(item);
 		return new ModelAndView("itemSuccess");
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.PUT)
-	public ModelAndView put(@PathVariable("id") long id, Item item) {
-		item.setId(id);
-		itemRepository.save(item);
+	public ModelAndView put(@PathVariable("id") long id, ItemDTO item) {
+		item.setItemId(id);
+		catalogService.save(item);
 		return new ModelAndView("itemSuccess");
 	}
 
@@ -76,12 +77,12 @@ public class CatalogController {
 	@RequestMapping(value = "/searchByName.html", produces = MediaType.TEXT_HTML_VALUE)
 	public ModelAndView search(@RequestParam("query") String query) {
 		return new ModelAndView("itemlist", "items",
-				itemRepository.findByNameContaining(query));
+			catalogService.search(query));
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.DELETE)
 	public ModelAndView delete(@PathVariable("id") long id) {
-		itemRepository.deleteById(id);
+		catalogService.delete(id);
 		return new ModelAndView("itemSuccess");
 	}
 

@@ -8,9 +8,9 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 @Configuration
 public class CatalogSpringRestDataConfig extends RepositoryRestConfigurerAdapter {
 
-    @Override
-    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-        config.exposeIdsFor(Item.class);
-    }
+//    @Override
+//    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+//        config.exposeIdsFor(Item.class);
+//    }
 }
 

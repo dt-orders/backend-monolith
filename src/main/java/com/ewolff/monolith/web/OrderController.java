@@ -36,10 +36,9 @@ class OrderController {
 
 	@Autowired
 	private OrderController(OrderService orderService,
-							OrderRepository orderRepository, CustomerService customerService,
+							CustomerService customerService,
 							CatalogService catalogService) {
 		super();
-		this.orderRepository = orderRepository;
 		this.customerService = customerService;
 		this.catalogService = catalogService;
 		this.orderService = orderService;
@@ -91,13 +90,13 @@ class OrderController {
 	@RequestMapping("/")
 	public ModelAndView orderHome() {
 		return new ModelAndView("orderlist", "orders",
-				orderRepository.findAll());
+				orderService.findAll());
 	}
 
 	@RequestMapping("/list.html")
 	public ModelAndView orderList() {
 		return new ModelAndView("orderlist", "orders",
-				orderRepository.findAll());
+				orderService.findAll());
 	}
 
 	@RequestMapping(value = "/form.html", method = RequestMethod.GET)

@@ -7,6 +7,8 @@ import com.ewolff.monolith.service.CustomerService;
 import com.ewolff.monolith.service.OrderService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -14,7 +16,7 @@ public class OrderServiceImpl implements OrderService {
 	private CustomerService customerService;
 	private CatalogService catalogService;
 
-	private OrderServiceImpl(OrderRepository orderRepository,
+	public OrderServiceImpl(OrderRepository orderRepository,
 							 CustomerService customerService, CatalogService catalogService) {
 		super();
 		this.orderRepository = orderRepository;
@@ -36,6 +38,11 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public double getPrice(long orderId) {
 		return orderRepository.findById(orderId).get().totalPrice(catalogService);
+	}
+
+	@Override
+	public Collection<Order> findAll() {
+		return null;
 	}
 
 }
