@@ -6,6 +6,7 @@ import com.ewolff.monolith.persistence.domain.Customer;
 import com.ewolff.monolith.persistence.domain.Item;
 import com.ewolff.monolith.persistence.repository.CustomerRepository;
 import com.ewolff.monolith.service.CustomerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -24,6 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Boolean isValidCustomerId(Long customerId) {
+        log.info("Calling CustomerService.isValidCustomerId() for id: {}", customerId);
         if (customerRepo.findById(customerId) != null) {
             return Boolean.TRUE;
         } else {
@@ -33,6 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Collection<CustomerDTO> findAll() {
+        log.info("Calling CustomerService.findAll()");
         List<CustomerDTO> dtoList = new ArrayList<>();
         for (Customer customer : customerRepo.findAll()) {
             dtoList.add(new CustomerDTO(customer.getId(), customer.getFirstname(), customer.getName(), customer.getEmail(),
@@ -43,6 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO getOne(long customerId) {
+        log.info("Calling CustomerService.getOne(): {}", customerId);
         CustomerDTO dto = null;
         Optional<Customer> customerOpt = customerRepo.findById(customerId);
         if (customerOpt.isPresent()) {
@@ -55,6 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO save(CustomerDTO dto) {
+        log.info("Calling CustomerService.save() with customerDto: {}", dto);
 
         Customer x = new Customer(dto.getFirstname(), dto.getName(), dto.getEmail(), dto.getStreet(),
                 dto.getCity());
@@ -67,6 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void delete(long id) {
+        log.info("Calling CustomerService.delete() for id: {}", id);
         if (customerRepo.findById(id) != null) {
             customerRepo.deleteById(id);
         }

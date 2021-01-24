@@ -10,6 +10,7 @@ import com.ewolff.monolith.persistence.repository.OrderRepository;
 import com.ewolff.monolith.service.CatalogService;
 import com.ewolff.monolith.service.CustomerService;
 import com.ewolff.monolith.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ewolff.monolith.dto.CustomerDTO;
 import com.ewolff.monolith.dto.ItemDTO;
 
+@Slf4j
 @Controller
 @RequestMapping("order")
 class OrderController {
@@ -46,25 +48,27 @@ class OrderController {
 	}
 
 	private String getVersion() {
-		System.out.println("Current APP_VERSION: " + this.version);
+		log.info("Current APP_VERSION: {}", this.version);
 		return this.version;
 	}
 
 	private void setVersion(String newVersion) {
 		this.version = newVersion;
-		System.out.println("Setting APP_VERSION to: " + this.version);
+		log.info("Setting APP_VERSION to: {}", this.version);
 	}
 
 	@ModelAttribute("items")
 	public Collection<ItemDTO> items() {
+		log.info("Calling OrderController.items()");
 		return catalogService.findAll();
 	}
 
 	@ModelAttribute("customers")
 	public Collection<CustomerDTO> customers() {
+		log.info("Calling OrderController.customers()");
 
 		if (this.getVersion().equals("2")) {
-			System.out.println("N+1 problem = ON");
+			log.info("N+1 problem = ON");
 			Collection<CustomerDTO> allCustomers = customerService.findAll();
 			// ************************************************
 			// N+1 Problem
@@ -82,47 +86,54 @@ class OrderController {
 			return allCustomers;
 		}
 		else {
-			System.out.println("N+1 problem = OFF");
+			log.info("N+1 problem = OFF");
 			return customerService.findAll();
 		}
 	}
 
 	@RequestMapping("/")
 	public ModelAndView orderHome() {
+		log.info("Calling OrderController.orderHome()");
 		return new ModelAndView("orderlist", "orders",
 				orderService.findAll());
 	}
 
 	@RequestMapping("/list.html")
 	public ModelAndView orderList() {
+		log.info("Calling OrderController.orderList()");
 		return new ModelAndView("orderlist", "orders",
 				orderService.findAll());
 	}
 
 	@RequestMapping(value = "/form.html", method = RequestMethod.GET)
 	public ModelAndView form() {
+		log.info("Calling OrderController.form()");
 		return new ModelAndView("orderForm", "order", new Order());
 	}
 
 	@RequestMapping(value = "/line", method = RequestMethod.POST)
 	public ModelAndView addLine(Order order) {
+		log.info("Calling OrderController.addLine() with order: {}", order);
 		order.addLine(0, catalogService.findAll().iterator().next().getItemId());
 		return new ModelAndView("orderForm", "order", order);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ModelAndView get(@PathVariable("id") long id) {
+		log.info("Calling OrderController.get() with id: {}", id);
 		return new ModelAndView("order", "order", orderRepository.findById(id).get());
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ModelAndView post(Order order) {
+		log.info("Calling OrderController.post() with order: {}", order);
 		order = orderService.order(order);
 		return new ModelAndView("orderSuccess");
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ModelAndView post(@PathVariable("id") long id) {
+	public ModelAndView delete(@PathVariable("id") long id) {
+		log.info("Calling OrderController.delete() with id: {}", id);
 		orderRepository.deleteById(id);
 
 		return new ModelAndView("orderSuccess");
