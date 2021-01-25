@@ -8,11 +8,16 @@ import java.util.Collection;
 
 public interface OrderService {
     Order order(Order order);
+
+    OrderDTO save(OrderDTO order);
+
     double getPrice(long orderId);
 
     Collection<OrderDTO> findAll();
 
     Order getOne(Long orderId);
+
+    OrderDTO getOneDTO(Long id);
 
     void delete(Long id);
 

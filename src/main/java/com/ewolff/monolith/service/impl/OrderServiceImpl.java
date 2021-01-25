@@ -46,8 +46,28 @@ public class OrderServiceImpl implements OrderService {
 		if (!customerService.isValidCustomerId(order.getCustomerId())) {
 			throw new IllegalArgumentException("Customer does not exist! Customer id = " + order.getCustomerId());
 		}
+
+		OrderDTO dto = mapper.map(order, OrderDTO.class);
+		save(dto);
+
+		log.info("Order to be saved: {}", order);
 		return orderRepository.save(order);
 	}
+
+	@Override
+	public OrderDTO save(OrderDTO orderDto) {
+		log.info("Calling OrderService.save() for orderDto: {}", orderDto);
+		if (orderDto.getOrderLine() == null || orderDto.getOrderLine().isEmpty()) {
+			throw new IllegalArgumentException("No order lines!");
+		}
+		if (!customerService.isValidCustomerId(orderDto.getCustomerId())) {
+			throw new IllegalArgumentException("Customer does not exist! Customer id = " + orderDto.getCustomerId());
+		}
+		Order order = mapper.map(orderDto, Order.class);
+		log.info("Order from OrderDTO to be saved: {}", order);
+		return null; //orderRepository.save(order);
+	}
+
 
 	@Override
 	public double getPrice(long id) {
@@ -92,6 +112,18 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return order;
 	}
+
+	@Override
+	public OrderDTO getOneDTO(Long id) {
+		log.info("Calling OrderService.getOne() for id: {}", id);
+		OrderDTO dto = null;
+		Optional<Order> orderOpt = orderRepository.findById(id);
+		if (orderOpt.isPresent()) {
+			dto = mapper.map(orderOpt.get(), OrderDTO.class);
+		}
+		return dto;
+	}
+
 
 	@Override
 	public void delete(Long id) {
