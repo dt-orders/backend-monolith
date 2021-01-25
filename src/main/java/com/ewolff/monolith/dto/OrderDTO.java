@@ -16,4 +16,8 @@ public class OrderDTO {
     private Long customerId;
 
     private List<OrderLineDTO> orderLine;
+
+    private Double totalPrice;
+
+    private String displayName;
 }

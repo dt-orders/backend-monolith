@@ -25,9 +25,9 @@
 					<td><a href="order/1.html" th:href="${order.id+'.html'}"
 							th:text="${order.id}">1</a></td>
 					<td
-						th:text="${@customerService.getOne(order.customerId).firstname} + ' ' + ${@customerService.getOne(order.customerId).name}">Firstname
+						th:text="${order.displayName}">Firstname
 						Name</td>
-					<td th:text="${order.totalPrice(@catalogService)}">42.0</td>
+					<td th:text="${order.totalPrice}">42.0</td>
 					<!--<td><form th:action="'/order/'+${order.id}" th:method="delete">
 							<input type="submit" value="delete" class="btn btn-link" />
 						</form></td>-->

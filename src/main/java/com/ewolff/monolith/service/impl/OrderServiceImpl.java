@@ -1,6 +1,8 @@
 package com.ewolff.monolith.service.impl;
 
 import com.ewolff.monolith.dto.CustomerDTO;
+import com.ewolff.monolith.dto.OrderDTO;
+import com.ewolff.monolith.dto.OrderLineDTO;
 import com.ewolff.monolith.persistence.domain.Order;
 import com.ewolff.monolith.persistence.repository.OrderRepository;
 import com.ewolff.monolith.service.CatalogService;
@@ -11,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -48,15 +51,34 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public double getPrice(long id) {
-
 		log.info("Calling OrderService.getPrice() for id: {}", id);
 		return orderRepository.findById(id).get().totalPrice(catalogService);
 	}
 
 	@Override
-	public Collection<Order> findAll() {
+	public Collection<OrderDTO> findAll() {
 		log.info("Calling OrderService.findAll()");
-		return StreamSupport.stream(orderRepository.findAll().spliterator(), false)
+		Collection<OrderDTO> orders = StreamSupport.stream(orderRepository.findAll().spliterator(), false)
+				.map(order -> {
+					OrderDTO dto = mapper.map(order, OrderDTO.class);
+					dto.setTotalPrice(order.totalPrice(catalogService));
+					dto.setOrderLine(updateOrderLineDTOs(dto.getOrderLine()));
+					CustomerDTO customer = customerService.getOne(order.getCustomerId());
+					dto.setDisplayName(customer.getFirstname() + " " + customer.getName());
+					return dto;
+				})
+				.collect(Collectors.toList());
+		log.info("OrderDTOs: {}", orders);
+		return orders;
+	}
+
+	private List<OrderLineDTO> updateOrderLineDTOs(List<OrderLineDTO> orderLines) {
+		return orderLines.stream()
+				.map(orderLine -> {
+							OrderLineDTO newOrderLine = new OrderLineDTO(orderLine.getId(), orderLine.getItemId(), null, orderLine.getCount());
+							newOrderLine.setItemName(catalogService.getOne(orderLine.getItemId()).getName());
+							return newOrderLine;
+				})
 				.collect(Collectors.toList());
 	}
 
