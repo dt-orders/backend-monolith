@@ -1,6 +1,7 @@
 package com.ewolff.monolith.service.impl;
 
 import com.ewolff.monolith.dto.CustomerDTO;
+import com.ewolff.monolith.dto.ItemDTO;
 import com.ewolff.monolith.dto.OrderDTO;
 import com.ewolff.monolith.dto.OrderLineDTO;
 import com.ewolff.monolith.persistence.domain.Order;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -38,23 +40,6 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public Order order(Order order) {
-		log.info("Calling OrderService.order() for order: {}", order);
-		if (order.getNumberOfLines() == 0) {
-			throw new IllegalArgumentException("No order lines!");
-		}
-		if (!customerService.isValidCustomerId(order.getCustomerId())) {
-			throw new IllegalArgumentException("Customer does not exist! Customer id = " + order.getCustomerId());
-		}
-
-		OrderDTO dto = mapper.map(order, OrderDTO.class);
-		save(dto);
-
-		log.info("Order to be saved: {}", order);
-		return orderRepository.save(order);
-	}
-
-	@Override
 	public OrderDTO save(OrderDTO orderDto) {
 		log.info("Calling OrderService.save() for orderDto: {}", orderDto);
 		if (orderDto.getOrderLine() == null || orderDto.getOrderLine().isEmpty()) {
@@ -65,7 +50,8 @@ public class OrderServiceImpl implements OrderService {
 		}
 		Order order = mapper.map(orderDto, Order.class);
 		log.info("Order from OrderDTO to be saved: {}", order);
-		return null; //orderRepository.save(order);
+		Order newOrder = orderRepository.save(order);
+		return mapper.map(newOrder, OrderDTO.class);
 	}
 
 
@@ -95,31 +81,32 @@ public class OrderServiceImpl implements OrderService {
 	private List<OrderLineDTO> updateOrderLineDTOs(List<OrderLineDTO> orderLines) {
 		return orderLines.stream()
 				.map(orderLine -> {
-							OrderLineDTO newOrderLine = new OrderLineDTO(orderLine.getId(), orderLine.getItemId(), null, orderLine.getCount());
+							OrderLineDTO newOrderLine = new OrderLineDTO(orderLine.getId(), orderLine.getItemId(), null, orderLine.getCount(), null);
 							newOrderLine.setItemName(catalogService.getOne(orderLine.getItemId()).getName());
+							newOrderLine.setPrice(catalogService.getOne(orderLine.getItemId()).getPrice());
 							return newOrderLine;
 				})
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public Order getOne(Long id) {
-		log.info("Calling OrderService.getOne() for id: {}", id);
-		Order order = null;
-		Optional<Order> orderOpt = orderRepository.findById(id);
-		if (orderOpt.isPresent()) {
-			order = orderOpt.get();
-		}
-		return order;
-	}
-
-	@Override
-	public OrderDTO getOneDTO(Long id) {
+	public OrderDTO getOne(Long id) {
 		log.info("Calling OrderService.getOne() for id: {}", id);
 		OrderDTO dto = null;
 		Optional<Order> orderOpt = orderRepository.findById(id);
 		if (orderOpt.isPresent()) {
 			dto = mapper.map(orderOpt.get(), OrderDTO.class);
+			ArrayList<OrderLineDTO> orderLines = new ArrayList<>();
+			for (OrderLineDTO orderLine : dto.getOrderLine()) {
+				ItemDTO item = catalogService.getOne(orderLine.getItemId());
+				orderLine.setItemName(item.getName());
+				orderLine.setPrice(item.getPrice());
+				orderLines.add(orderLine);
+			}
+			dto.setOrderLine(orderLines);
+			dto.setTotalPrice(orderOpt.get().totalPrice(catalogService));
+			CustomerDTO customer = customerService.getOne(dto.getCustomerId());
+			dto.setDisplayName(customer.getFirstname() + " " + customer.getName());
 		}
 		return dto;
 	}

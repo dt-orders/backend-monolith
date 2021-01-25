@@ -13,6 +13,7 @@ public class OrderLineDTO {
     private Long itemId;
     private String itemName;
     private Integer count;
+    private Double price;
 
 
 }

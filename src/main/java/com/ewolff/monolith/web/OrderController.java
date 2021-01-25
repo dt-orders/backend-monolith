@@ -1,12 +1,9 @@
 package com.ewolff.monolith.web;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
-import com.ewolff.monolith.persistence.domain.Order;
-import com.ewolff.monolith.persistence.repository.OrderRepository;
+import com.ewolff.monolith.dto.OrderDTO;
+import com.ewolff.monolith.dto.OrderLineDTO;
 import com.ewolff.monolith.service.CatalogService;
 import com.ewolff.monolith.service.CustomerService;
 import com.ewolff.monolith.service.OrderService;
@@ -106,27 +103,33 @@ class OrderController {
 	@RequestMapping(value = "/form.html", method = RequestMethod.GET)
 	public ModelAndView form() {
 		log.info("Calling OrderController.form()");
-		return new ModelAndView("orderForm", "order", new Order());
+		return new ModelAndView("orderForm", "order", new OrderDTO());
 	}
 
 	@RequestMapping(value = "/line", method = RequestMethod.POST)
-	public ModelAndView addLine(Order order) {
+	public ModelAndView addLine(OrderDTO order) {
 		log.info("Calling OrderController.addLine() with order: {}", order);
-		order.addLine(0, catalogService.findAll().iterator().next().getItemId());
+		ItemDTO item = catalogService.findAll().iterator().next();
+		if (order.getOrderLine() == null) {
+			order.setOrderLine(new ArrayList<OrderLineDTO>());
+		}
+		order.getOrderLine().add(new OrderLineDTO(0L, item.getItemId(), item.getName(),0, item.getPrice()));
+		//order.addLine(0, catalogService.findAll().iterator().next().getItemId());
 		return new ModelAndView("orderForm", "order", order);
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.GET)
 	public ModelAndView get(@PathVariable("id") Long id) {
 		log.info("Calling OrderController.get() with id: {}", id);
-		log.info("Order: {}", orderService.getOne(id));
+		OrderDTO order = orderService.getOne(id);
+		log.info("Order: {}", order);
 		return new ModelAndView("order", "order", orderService.getOne(id));
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public ModelAndView post(Order order) {
+	public ModelAndView post(OrderDTO order) {
 		log.info("Calling OrderController.post() with order: {}", order);
-		order = orderService.order(order);
+		order = orderService.save(order);
 		return new ModelAndView("orderSuccess");
 	}
 

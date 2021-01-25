@@ -17,8 +17,8 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td th:text="${@customerService.getOne(order.customerId).firstname}+' '+${@customerService.getOne(order.customerId).name}">Customer</td>
-					<td th:text="${order.totalPrice(@catalogService)}">Total price</td>
+					<td th:text="${order.displayName}">Customer</td>
+					<td th:text="${order.totalPrice}">Total price</td>
 				</tr>
 			</tbody>
 		</table>
@@ -33,9 +33,9 @@
 			</thead>
 			<tbody>
 				<tr th:each="orderLine : ${order.orderLine}">
-					<td th:text="${@catalogService.getOne(orderLine.itemId).name}">Item</td>
+					<td th:text="${orderLine.itemName}">Item</td>
 					<td th:text="${orderLine.count}">Quantity</td>
-					<td th:text="${@catalogService.getOne(orderLine.itemId).price}">Price</td>
+					<td th:text="${orderLine.price}">Price</td>
 
 				</tr>
 			</tbody>

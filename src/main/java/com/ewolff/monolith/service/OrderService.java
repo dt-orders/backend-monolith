@@ -7,7 +7,6 @@ import com.ewolff.monolith.persistence.domain.Order;
 import java.util.Collection;
 
 public interface OrderService {
-    Order order(Order order);
 
     OrderDTO save(OrderDTO order);
 
@@ -15,9 +14,7 @@ public interface OrderService {
 
     Collection<OrderDTO> findAll();
 
-    Order getOne(Long orderId);
-
-    OrderDTO getOneDTO(Long id);
+    OrderDTO getOne(Long id);
 
     void delete(Long id);
 
