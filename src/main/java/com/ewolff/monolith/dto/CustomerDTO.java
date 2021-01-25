@@ -1,13 +1,17 @@
 package com.ewolff.monolith.dto;
 
-import lombok.ToString;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import lombok.*;
 import org.springframework.hateoas.ResourceSupport;
 
-@ToString
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomerDTO extends ResourceSupport {
+
+	// Note: Lombok annotations implement boilerplate constructors,
+	// setters, getters and equals / hashcode
+
+	private Long customerId;
 
 	private String name;
 
@@ -18,85 +22,5 @@ public class CustomerDTO extends ResourceSupport {
 	private String street;
 
 	private String city;
-
-	private long customerId;
-
-	public CustomerDTO() {
-	}
-
-	public CustomerDTO(long id, String firstname, String name, String email,
-			String street, String city) {
-		super();
-		this.customerId = id;
-		this.firstname = firstname;
-		this.name = name;
-		this.email = email;
-		this.street = street;
-		this.city = city;
-	}
-
-	public long getCustomerId() {
-		return this.customerId;
-	}
-
-	public void setCustomerId(long id) {
-		this.customerId = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
-
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this);
-
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj);
-	}
 
 }

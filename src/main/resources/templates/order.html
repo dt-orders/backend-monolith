@@ -18,7 +18,7 @@
 			<tbody>
 				<tr>
 					<td th:text="${@customerService.getOne(order.customerId).firstname}+' '+${@customerService.getOne(order.customerId).name}">Customer</td>
-					<td th:text="${order.totalPrice(@customerService)}">Total price</td>
+					<td th:text="${order.totalPrice(@catalogService)}">Total price</td>
 				</tr>
 			</tbody>
 		</table>

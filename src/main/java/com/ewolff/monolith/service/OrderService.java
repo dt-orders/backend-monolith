@@ -10,4 +10,9 @@ public interface OrderService {
     double getPrice(long orderId);
 
     Collection<Order> findAll();
+
+    Order getOne(Long orderId);
+
+    void delete(Long id);
+
 }

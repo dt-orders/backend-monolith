@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface CatalogService {
 
-    double price(long itemId);
+    double price(Long itemId);
 
     Collection<ItemDTO> findAll();
 
-    ItemDTO getOne(long itemId);
+    ItemDTO getOne(Long itemId);
 
     ItemDTO save(ItemDTO item);
 
-    void delete(long id);
+    void delete(Long id);
 
     List<ItemDTO> search(String query);
 }

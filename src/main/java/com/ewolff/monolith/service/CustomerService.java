@@ -11,10 +11,10 @@ public interface CustomerService {
 
     Collection<CustomerDTO> findAll();
 
-    CustomerDTO getOne(long customerId);
+    CustomerDTO getOne(Long customerId);
 
     CustomerDTO save(CustomerDTO customer);
 
-    void delete(long id);
+    void delete(Long id);
 
 }

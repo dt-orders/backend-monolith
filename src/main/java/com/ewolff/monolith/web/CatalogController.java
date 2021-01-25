@@ -44,7 +44,7 @@ public class CatalogController {
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-	public ModelAndView item(@PathVariable("id") long id) {
+	public ModelAndView item(@PathVariable("id") Long id) {
 		log.info("In CatalogController.item() with id: {}", id);
 		return new ModelAndView("item", "item", catalogService.getOne(id));
 	}
@@ -69,7 +69,7 @@ public class CatalogController {
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.PUT)
-	public ModelAndView put(@PathVariable("id") long id, ItemDTO item) {
+	public ModelAndView put(@PathVariable("id") Long id, ItemDTO item) {
 		log.info("In CatalogController.put() for itemId: {} and itemDto: {}", id, item);
 		item.setItemId(id);
 		catalogService.save(item);
@@ -90,7 +90,7 @@ public class CatalogController {
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.DELETE)
-	public ModelAndView delete(@PathVariable("id") long id) {
+	public ModelAndView delete(@PathVariable("id") Long id) {
 		log.info("In CatalogController.delete() with id: {}", id);
 		catalogService.delete(id);
 		return new ModelAndView("itemSuccess");

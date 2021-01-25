@@ -8,8 +8,8 @@
 <body>
 	<h1 layout:fragment="header">Customer : Edit</h1>
 	<div layout:fragment="content" class="container">
-		<form th:action="${customer.customerId!=0} ? ${customer.customerId}+'.html' : 'form.html' " th:object="${customer}"
-			th:method="${customer.customerId != 0} ? put : post" role="form">
+		<form th:action="${customer.customerId!=null} ? ${customer.customerId}+'.html' : 'form.html' " th:object="${customer}"
+			th:method="${customer.customerId != null} ? put : post" role="form">
 			<div class="form-group">
 				<label >Name</label> <input type="text"
 					th:field="*{name}" class="form-control" placeholder="name" />

@@ -1,51 +1,55 @@
 package com.ewolff.monolith.service.impl;
 
-import com.ewolff.monolith.dto.CustomerDTO;
 import com.ewolff.monolith.dto.ItemDTO;
-import com.ewolff.monolith.persistence.domain.Customer;
 import com.ewolff.monolith.persistence.domain.Item;
 import com.ewolff.monolith.persistence.repository.ItemRepository;
 import com.ewolff.monolith.service.CatalogService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
 public class CatalogServiceImpl implements CatalogService {
 
-    private ItemRepository itemRepo;
+    private final ItemRepository itemRepo;
 
-    public CatalogServiceImpl(ItemRepository itemRepo) {
+    private final ModelMapper mapper;
+
+    public CatalogServiceImpl(ItemRepository itemRepo, ModelMapper mapper) {
         this.itemRepo = itemRepo;
+        this.mapper = mapper;
     }
 
     @Override
-    public double price(long itemId) {
+    public double price(Long itemId) {
         return getOne(itemId).getPrice();
     }
 
     @Override
     public Collection<ItemDTO> findAll() {
         log.info("Calling CatalogService.findAll()");
-        List<ItemDTO> dtoList = new ArrayList<>();
-        for (Item item : itemRepo.findAll()) {
-            dtoList.add(new ItemDTO(item.getId(), item.getName(), item.getPrice()));
-        }
+        Iterable<Item> items = itemRepo.findAll();
+        List<ItemDTO> dtoList = StreamSupport.stream(items.spliterator(), false)
+                .map(item -> mapper.map(item, ItemDTO.class))
+                .collect(Collectors.toList());
         return dtoList;
     }
 
     @Override
-    public ItemDTO getOne(long itemId) {
+    public ItemDTO getOne(Long itemId) {
         log.info("Calling CatalogService.findOne() for itemId: {}", itemId);
         ItemDTO dto = null;
         Optional<Item> itemOpt = itemRepo.findById(itemId);
         if (itemOpt.isPresent()) {
-            dto = new ItemDTO(itemOpt.get().getId(), itemOpt.get().getName(), itemOpt.get().getPrice());
+            dto = mapper.map(itemOpt.get(), ItemDTO.class);
         }
         return dto;
     }
@@ -53,16 +57,17 @@ public class CatalogServiceImpl implements CatalogService {
     @Override
     public ItemDTO save(ItemDTO dto) {
         log.info("Calling CatalogService.save() for itemDto: {}", dto);
-        Item x = new Item(dto.getName(), dto.getPrice());
+        Item x = mapper.map(dto, Item.class);
         x.setId(dto.getItemId());
+        log.info("CatalogService.save() Item: {}", x);
         Item i = itemRepo.save(x);
         return new ItemDTO(i.getId(), i.getName(), i.getPrice());
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Long id) {
         log.info("Calling CatalogService.delete() for itemId: {}", id);
-        if (itemRepo.findById(id) != null) {
+        if (itemRepo.findById(id).isPresent()) {
             itemRepo.deleteById(id);
         }
     }
@@ -70,12 +75,10 @@ public class CatalogServiceImpl implements CatalogService {
     @Override
     public List<ItemDTO> search(String query) {
         log.info("Calling CatalogService.search() with query: {}", query);
-
-        List<ItemDTO> results = new ArrayList<>();
         List<Item> items = itemRepo.findByNameContaining(query);
-        for (Item i : items) {
-            results.add(new ItemDTO(i.getId(), i.getName(), i.getPrice()));
-        }
-        return results;
+        return items
+                .stream()
+                .map(item -> mapper.map(item, ItemDTO.class))
+                .collect(Collectors.toList());
     }
 }

@@ -28,8 +28,6 @@ import com.ewolff.monolith.dto.ItemDTO;
 @RequestMapping("order")
 class OrderController {
 
-	private OrderRepository orderRepository;
-
 	private OrderService orderService;
 	private CustomerService customerService;
 	private CatalogService catalogService;
@@ -118,10 +116,11 @@ class OrderController {
 		return new ModelAndView("orderForm", "order", order);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ModelAndView get(@PathVariable("id") long id) {
+	@RequestMapping(value = "/{id}.html", method = RequestMethod.GET)
+	public ModelAndView get(@PathVariable("id") Long id) {
 		log.info("Calling OrderController.get() with id: {}", id);
-		return new ModelAndView("order", "order", orderRepository.findById(id).get());
+		log.info("Order: {}", orderService.getOne(id));
+		return new ModelAndView("order", "order", orderService.getOne(id));
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
@@ -134,7 +133,7 @@ class OrderController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ModelAndView delete(@PathVariable("id") long id) {
 		log.info("Calling OrderController.delete() with id: {}", id);
-		orderRepository.deleteById(id);
+		orderService.delete(id);
 
 		return new ModelAndView("orderSuccess");
 	}

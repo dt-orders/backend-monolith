@@ -87,14 +87,14 @@ public class CustomerController {
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-	public ModelAndView customer(@PathVariable("id") long id) {
+	public ModelAndView customer(@PathVariable("id") Long id) {
 		log.info("In CustomerController.customer() with id: {}", id);
 		return new ModelAndView("customer", "customer",
 				customerService.getOne(id));
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.PUT)
-	public ModelAndView put(@PathVariable("id") long id, CustomerDTO customer,
+	public ModelAndView put(@PathVariable("id") Long id, CustomerDTO customer,
 							HttpServletRequest httpRequest) {
 		log.info("In CustomerController.put() with id: {} and customerDto: {}", id, customer);
 		customer.setCustomerId(id);
@@ -104,7 +104,7 @@ public class CustomerController {
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.DELETE)
-	public ModelAndView delete(@PathVariable("id") long id) {
+	public ModelAndView delete(@PathVariable("id") Long id) {
 		log.info("In CustomerController.delete() with id: {}", id);
 		customerService.delete(id);
 		return new ModelAndView("customerSuccess");

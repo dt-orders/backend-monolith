@@ -9,27 +9,37 @@ import com.ewolff.monolith.service.OrderService;
 import com.ewolff.monolith.service.impl.CatalogServiceImpl;
 import com.ewolff.monolith.service.impl.CustomerServiceImpl;
 import com.ewolff.monolith.service.impl.OrderServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 
 @Configuration
 public class AppConfig {
 
     @Bean
-    public CustomerService customerService(CustomerRepository customerRepo) {
-        return new CustomerServiceImpl(customerRepo);
+    public CustomerService customerService(CustomerRepository customerRepo, ModelMapper mapper) {
+        return new CustomerServiceImpl(customerRepo, mapper);
     }
 
     @Bean
-    public CatalogService catalogService(ItemRepository itemRepo) {
-        return new CatalogServiceImpl(itemRepo);
+    public CatalogService catalogService(ItemRepository itemRepo, ModelMapper mapper) {
+        return new CatalogServiceImpl(itemRepo, mapper);
     }
 
     @Bean
     public OrderService orderService(OrderRepository orderRepo,
-                                     CustomerService customerService, CatalogService catalogService) {
-        return new OrderServiceImpl(orderRepo, customerService, catalogService);
+                                     CustomerService customerService, CatalogService catalogService, ModelMapper mapper) {
+        return new OrderServiceImpl(orderRepo, customerService, catalogService, mapper);
     }
 
+    @Bean
+    public ModelMapper modelMapper() {
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration()
+                .setFieldMatchingEnabled(true)
+                .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE);
+        return mapper;
+    }
 
 }

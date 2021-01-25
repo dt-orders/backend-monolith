@@ -16,13 +16,13 @@ public class ItemDTO extends ResourceSupport {
 	private double price;
 
 	@JsonProperty("id")
-	private long itemId;
+	private Long itemId;
 
 	public ItemDTO() {
 		super();
 	}
 
-	public ItemDTO(long id, String name, double price) {
+	public ItemDTO(Long id, String name, double price) {
 		super();
 		this.itemId = id;
 		this.name = name;
@@ -45,11 +45,11 @@ public class ItemDTO extends ResourceSupport {
 		this.price = price;
 	}
 
-	public long getItemId() {
+	public Long getItemId() {
 		return itemId;
 	}
 
-	public void setItemId(long id) {
+	public void setItemId(Long id) {
 		this.itemId = id;
 	}
 
