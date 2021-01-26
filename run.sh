@@ -1,9 +1,19 @@
 #!/bin/bash
 
-FULLIMAGE=dtdemos/dt-orders-frontend:1
+REPOSITORY=$1
+VERSION_TAG=$2
 
-docker run -it -p 80:8080 \
-  --env CUSTOMER_URL=http://172.17.0.1:8080/customer \
-  --env CATALOG_URL=http://172.17.0.1:8080/catalog \
-  --env ORDER_URL=http://172.17.0.1:8080/order \
-  $FULLIMAGE 
+if [ -z "$REPOSITORY" ]
+then
+    REPOSITORY=dtdemos
+fi
+
+if [ -z "$VERSION_TAG" ]
+then
+    VERSION_TAG=1
+fi
+
+IMAGE=dt-orders-backend-monolith
+FULLIMAGE=$REPOSITORY/$IMAGE:$VERSION_TAG
+
+docker run -it -p 8080:8080 $FULLIMAGE 
