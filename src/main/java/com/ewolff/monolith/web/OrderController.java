@@ -47,11 +47,6 @@ class OrderController {
 		return this.version;
 	}
 
-	private void setVersion(String newVersion) {
-		this.version = newVersion;
-		log.info("Setting APP_VERSION to: {}", this.version);
-	}
-
 	@ModelAttribute("items")
 	public Collection<ItemDTO> items() {
 		log.info("Calling OrderController.items()");
@@ -139,33 +134,5 @@ class OrderController {
 		orderService.delete(id);
 
 		return new ModelAndView("orderSuccess");
-	}
-
-   @RequestMapping(value = "/version", method = RequestMethod.GET)
-   @ResponseBody
-   public String showVersion() {
-		String version;
-		try {
-			version = this.getVersion();
-		}
-		catch(Exception e) {
-			version = "APP_VERSION not found";
-		}
-		return version;
-   } 
-
-	@RequestMapping(value = "setversion/{version}", method = RequestMethod.GET)
-	public ModelAndView webSetVersion(@PathVariable("version") String newVersion) {
-		this.setVersion(newVersion);
-		return new ModelAndView("orderSuccess");
-	}
-
-	@RequestMapping(value = "/health", method = RequestMethod.GET)
-	@ResponseBody
-	public String getHealth() {
-
-		Date dateNow = Calendar.getInstance().getTime();
-		String health = "{ \"health\":[{\"service\":\"order-service\",\"status\":\"OK\",\"date\":\"" + dateNow + "\" }]}";
-		return health;
 	}
 }
