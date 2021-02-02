@@ -1,13 +1,14 @@
-package com.ewolff.microservice;
+package com.ewolff.monolith;
 
 //RJAHN
-import com.ewolff.microservice.customer.Customer;
-import com.ewolff.microservice.customer.CustomerRepository;
-import com.ewolff.microservice.catalog.Item;
-import com.ewolff.microservice.catalog.ItemRepository;
+import com.ewolff.monolith.persistence.domain.Customer;
+import com.ewolff.monolith.persistence.repository.CustomerRepository;
+import com.ewolff.monolith.persistence.domain.Item;
+import com.ewolff.monolith.persistence.repository.ItemRepository;
 
 import javax.annotation.PostConstruct;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -30,6 +31,7 @@ import org.json.simple.parser.*;
 import java.io.IOException;
 import java.util.Iterator;
 
+@Slf4j
 @ComponentScan
 @EnableAutoConfiguration
 @Component
@@ -84,7 +86,7 @@ public class BackendApp {
 
 				String responseBody = httpclient.execute(httpget, responseHandler);
 				if (responseBody != null) {
-					System.out.println("Adding customer: " + it);
+					log.info("Adding customer: {}", it);
 					JSONParser parser = new JSONParser();
 					JSONObject obj = (JSONObject) parser.parse(responseBody);
 					JSONArray result = (JSONArray) obj.get("results");
@@ -97,12 +99,12 @@ public class BackendApp {
 						JSONObject address = (JSONObject) user.get("location");
 						String street = address.get("street").toString();
 						String city = address.get("city").toString();
-						System.out.println("fName: " + fName + " , lName: " +lName + " ,email: " + fName + "." + lName + "@gmail.com" + " ,street: " + street + " ,city:" + city);
+						log.info("fName: {}, lName: {}, email: {}.{}@gmail.com ,street: {}, city: {}", fName, lName, fName, lName, street, city);
 						customerRepository.save(new Customer(fName, lName, "aa@gmail.com", street, city));
 					}
 				}
 				else {
-					System.out.println("Skipping customer: " + it);
+					log.info("Skipping customer: {}", it);
 				}
 			}
         }

@@ -1,4 +1,4 @@
-package com.ewolff.microservice.order.logic;
+package com.ewolff.monolith.persistence.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +10,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.ewolff.monolith.service.CatalogService;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.ewolff.microservice.order.clients.CatalogClient;
 
 @Entity
 @Table(name = "ORDERTABLE")
-class Order {
+public class Order {
 
 	@Id
 	@GeneratedValue
@@ -72,9 +72,9 @@ class Order {
 		return orderLine.size();
 	}
 
-	public double totalPrice(CatalogClient itemClient) {
+	public double totalPrice(CatalogService itemService) {
 		return orderLine.stream()
-				.map((ol) -> ol.getCount() * itemClient.price(ol.getItemId()))
+				.map((ol) -> ol.getCount() * itemService.price(ol.getItemId()))
 				.reduce(0.0, (d1, d2) -> d1 + d2);
 	}
 

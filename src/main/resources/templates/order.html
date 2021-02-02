@@ -17,8 +17,8 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td th:text="${@customerClient.getOne(order.customerId).firstname}+' '+${@customerClient.getOne(order.customerId).name}">Customer</td>
-					<td th:text="${order.totalPrice(@catalogClient)}">Total price</td>
+					<td th:text="${order.displayName}">Customer</td>
+					<td th:text="${order.totalPrice}">Total price</td>
 				</tr>
 			</tbody>
 		</table>
@@ -33,9 +33,9 @@
 			</thead>
 			<tbody>
 				<tr th:each="orderLine : ${order.orderLine}">
-					<td th:text="${@catalogClient.getOne(orderLine.itemId).name}">Item</td>
+					<td th:text="${orderLine.itemName}">Item</td>
 					<td th:text="${orderLine.count}">Quantity</td>
-					<td th:text="${@catalogClient.getOne(orderLine.itemId).price}">Price</td>
+					<td th:text="${orderLine.price}">Price</td>
 
 				</tr>
 			</tbody>

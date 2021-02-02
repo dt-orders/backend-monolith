@@ -22,6 +22,9 @@ echo ""
 echo "========================================================"
 echo "Building $FULLIMAGE"
 echo "========================================================"
+
+./writeManifest.sh
+
 #./mvnw clean package
 ./mvnw clean package -Dmaven.test.skip=true
 docker build -t $FULLIMAGE .

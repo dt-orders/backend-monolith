@@ -9,11 +9,6 @@
 <h1 layout:fragment="header">Order : Add</h1>
 <div layout:fragment="content" class="container">
     <form action="." th:object="${order}" method="post" role="form">
-        <!--
-            th:value="${customer.customerId}" value="42" >Rod Johnson</option>
-            th:text="${customer.customerId}"
-            th:text="${customer.firstname}+' '+${customer.name}+' ('+${#strings.toString(customer.customerId)}"
-        -->
         <div class="form-group">
             <label for="selectCustomer">Customer</label> <select
                 name="selectCustomer" th:field="*{customerId}">
