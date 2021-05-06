@@ -28,23 +28,18 @@ class OrderController {
 	private OrderService orderService;
 	private CustomerService customerService;
 	private CatalogService catalogService;
-
-	private String version;
+	private BackendController backendController;
 
 	@Autowired
 	private OrderController(OrderService orderService,
 							CustomerService customerService,
-							CatalogService catalogService) {
+							CatalogService catalogService, 
+							BackendController backendController) {
 		super();
 		this.customerService = customerService;
 		this.catalogService = catalogService;
 		this.orderService = orderService;
-		this.version = System.getenv("APP_VERSION");
-	}
-
-	private String getVersion() {
-		log.info("Current APP_VERSION: {}", this.version);
-		return this.version;
+		this.backendController = backendController;
 	}
 
 	@ModelAttribute("items")
@@ -54,10 +49,17 @@ class OrderController {
 	}
 
 	@ModelAttribute("customers")
-	public Collection<CustomerDTO> customers() {
+	public Collection<CustomerDTO> customers() throws InterruptedException, Exception {
 		log.info("Calling OrderController.customers()");
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
+		}
 
-		if (this.getVersion().equals("2")) {
+		if (backendController.getVersion().equals("2")) {
 			log.info("N+1 problem = ON");
 			Collection<CustomerDTO> allCustomers = customerService.findAll();
 			// ************************************************
@@ -82,27 +84,48 @@ class OrderController {
 	}
 
 	@RequestMapping("/")
-	public ModelAndView orderHome() {
+	public ModelAndView orderHome() throws InterruptedException, Exception {
 		log.info("Calling OrderController.orderHome()");
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
+		}
 		return new ModelAndView("orderlist", "orders",
 				orderService.findAll());
 	}
 
 	@RequestMapping("/list.html")
-	public ModelAndView orderList() {
+	public ModelAndView orderList() throws InterruptedException, Exception {
 		log.info("Calling OrderController.orderList()");
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
+		}
 		return new ModelAndView("orderlist", "orders",
 				orderService.findAll());
 	}
 
 	@RequestMapping(value = "/form.html", method = RequestMethod.GET)
-	public ModelAndView form() {
+	public ModelAndView form() throws InterruptedException, Exception {
 		log.info("Calling OrderController.form()");
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
+		}
 		return new ModelAndView("orderForm", "order", new OrderDTO());
 	}
 
 	@RequestMapping(value = "/line", method = RequestMethod.POST)
-	public ModelAndView addLine(OrderDTO order) {
+	public ModelAndView addLine(OrderDTO order) throws InterruptedException, Exception {
 		log.info("Calling OrderController.addLine() with order: {}", order);
 		ItemDTO item = catalogService.findAll().iterator().next();
 		if (order.getOrderLine() == null) {
@@ -114,8 +137,15 @@ class OrderController {
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.GET)
-	public ModelAndView get(@PathVariable("id") Long id) {
+	public ModelAndView get(@PathVariable("id") Long id) throws InterruptedException, Exception {
 		log.info("Calling OrderController.get() with id: {}", id);
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
+		}
 		OrderDTO order = orderService.getOne(id);
 		log.info("Order: {}", order);
 		return new ModelAndView("order", "order", orderService.getOne(id));

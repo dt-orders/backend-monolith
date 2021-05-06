@@ -19,14 +19,25 @@ public class BackendController {
 
 	private String version;
 
-	private String getVersion() {
-		log.info("Current APP_VERSION: {}", this.version);
+	public String getVersion() {
+		log.info("BackendController Current APP_VERSION: {}", this.version);
 		return this.version;
 	}
 
-	private void setVersion(String newVersion) {
+	public void setVersion(String newVersion) {
 		this.version = newVersion;
-		log.info("Setting APP_VERSION to: {}", this.version);
+		log.info("BackendController Setting APP_VERSION to: {}", this.version);
+	}
+
+	public void slowMeDown() throws InterruptedException {
+		System.out.println("Doing a fake slowdown");
+		Integer sleepTime = Integer.valueOf(System.getenv("SLEEP_TIME"));
+		Thread.sleep(sleepTime);
+	}
+
+	public void throwException() throws Exception {
+		System.out.println("Throwing fake exception");
+		throw new Exception("Throwing fake exception");
 	}
 
 	@Autowired

@@ -2,8 +2,6 @@ package com.ewolff.monolith.web;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ewolff.monolith.dto.CustomerDTO;
-import com.ewolff.monolith.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.ewolff.monolith.dto.CustomerDTO;
+import com.ewolff.monolith.service.CustomerService;
 import com.ewolff.monolith.persistence.domain.Customer;
 import com.ewolff.monolith.persistence.repository.CustomerRepository;
 
@@ -25,52 +25,39 @@ import com.ewolff.monolith.persistence.repository.CustomerRepository;
 @RequestMapping("customer")
 public class CustomerController {
 
-	private String version;
-
 	private CustomerService customerService;
-
-	private String getVersion() {
-		log.info("Current APP_VERSION: {}", this.version);
-		return this.version;
-	}
+	private BackendController backendController;
 
 	@Autowired
-	public CustomerController(CustomerService customerService) {
+	public CustomerController(CustomerService customerService, BackendController backendController) {
 		this.customerService = customerService;
-		this.version = System.getenv("APP_VERSION");
+		this.backendController = backendController;
 	}
 
-
 	@RequestMapping("/list.html")
-	public ModelAndView customerList() {
-		log.info("In CustomerController.customerList() with APP_VERSION: {}", this.getVersion());
-
-		if (this.getVersion().equals("2")) {
-			log.info("Response Time problem = ON");
-			try
-			{
-				// ************************************************
-				// Response Time problem
-				// ************************************************
-				Thread.sleep(5000);
-			}
-			catch(InterruptedException ex)
-			{
-			   Thread.currentThread().interrupt();
-			}
-			return new ModelAndView("customerlist", "customers",
-					customerService.findAll());
+	public ModelAndView customerList() throws InterruptedException, Exception {
+		log.info("In CustomerController.customerList() APP_VERSION: {}", backendController.getVersion());
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			System.out.println("About to call backendController.slowMeDown");
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
 		}
-		else {
-			log.info("Response Time problem = OFF");
-			return new ModelAndView("customerlist", "customers",
-					customerService.findAll());
-		}
+		return new ModelAndView("customerlist", "customers", customerService.findAll());
 	}
 
 	@RequestMapping(value = "/form.html", method = RequestMethod.GET)
-	public ModelAndView add() {
+	public ModelAndView add() throws InterruptedException, Exception {
 		log.info("In CustomerController.add()");
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
+		}
 		return new ModelAndView("customer", "customer", new CustomerDTO());
 	}
 
@@ -82,8 +69,15 @@ public class CustomerController {
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-	public ModelAndView customer(@PathVariable("id") Long id) {
+	public ModelAndView customer(@PathVariable("id") Long id) throws InterruptedException, Exception {
 		log.info("In CustomerController.customer() with id: {}", id);
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
+		}
 		return new ModelAndView("customer", "customer",
 				customerService.getOne(id));
 	}
