@@ -1,7 +1,6 @@
 package com.ewolff.monolith.web;
 
 import com.ewolff.monolith.dto.ItemDTO;
-import com.ewolff.monolith.service.CatalogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Calendar;
 import java.util.Date; 
-
+import com.ewolff.monolith.service.CatalogService;
 import com.ewolff.monolith.persistence.domain.Item;
 import com.ewolff.monolith.persistence.repository.ItemRepository;
 
@@ -24,35 +23,53 @@ import com.ewolff.monolith.persistence.repository.ItemRepository;
 @RequestMapping("catalog")
 public class CatalogController {
 
-	private String version;
-	private final CatalogService catalogService;
-
-	private String getVersion() {
-		log.info("Current APP_VERSION: {}", this.version);
-		return this.version;
-	}
+	private CatalogService catalogService;
+	private BackendController backendController;
 
 	@Autowired
-	public CatalogController(CatalogService catalogService) {
+	public CatalogController(CatalogService catalogService, BackendController backendController) {
 		this.catalogService = catalogService;
-		this.version = System.getenv("APP_VERSION");
+		this.backendController = backendController;
 	}
 
 	@RequestMapping(value = "/{id}.html", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-	public ModelAndView item(@PathVariable("id") Long id) {
+	public ModelAndView item(@PathVariable("id") Long id) throws InterruptedException, Exception {
+
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
+		}
+
 		log.info("In CatalogController.item() with id: {}", id);
 		return new ModelAndView("item", "item", catalogService.getOne(id));
 	}
 
 	@RequestMapping("/list.html")
-	public ModelAndView itemList() {
+	public ModelAndView itemList() throws InterruptedException, Exception {
 		log.info("In CatalogController.itemList()");
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
+		}
 		return new ModelAndView("itemlist", "items", catalogService.findAll());
 	}
 
 	@RequestMapping(value = "/form.html", method = RequestMethod.GET)
-	public ModelAndView add() {
+	public ModelAndView add() throws InterruptedException, Exception {
 		log.info("In CatalogController.add()");
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
+		}
 		return new ModelAndView("item", "item", new ItemDTO());
 	}
 
@@ -72,14 +89,28 @@ public class CatalogController {
 	}
 
 	@RequestMapping(value = "/searchForm.html", produces = MediaType.TEXT_HTML_VALUE)
-	public ModelAndView searchForm() {
+	public ModelAndView searchForm() throws InterruptedException, Exception {
 		log.info("In CatalogController.searchForm()");
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
+		}
 		return new ModelAndView("itemSearchForm");
 	}
 
 	@RequestMapping(value = "/searchByName.html", produces = MediaType.TEXT_HTML_VALUE)
-	public ModelAndView search(@RequestParam("query") String query) {
+	public ModelAndView search(@RequestParam("query") String query) throws InterruptedException, Exception {
 		log.info("In CatalogController.search() with query: {}", query);
+		String version = backendController.getVersion();
+		if (version.equals("2")) {
+			backendController.slowMeDown();
+		} 
+		else if (version.equals("3")) {
+			backendController.throwException();
+		}
 		return new ModelAndView("itemlist", "items",
 			catalogService.search(query));
 	}

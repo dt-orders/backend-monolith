@@ -1,6 +1,6 @@
 package com.ewolff.monolith.service;
 
-import com.ewolff.monolith.dto.CustomerDTO;
+//import com.ewolff.monolith.dto.CustomerDTO;
 import com.ewolff.monolith.dto.ItemDTO;
 
 import java.util.Collection;

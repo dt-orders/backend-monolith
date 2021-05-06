@@ -44,7 +44,6 @@ public class BackendApp {
 	public BackendApp(CustomerRepository customerRepository, ItemRepository itemRepository) {
 		this.customerRepository = customerRepository;
 		this.itemRepository = itemRepository;
-
 	}
 
 	@PostConstruct
