@@ -1,6 +1,10 @@
-FROM openjdk:14
+FROM openjdk:15
 COPY target/*.jar .
 COPY ./MANIFEST /
+
+# used in the response time pattern
+ARG SLEEP_TIME=1000
+ENV SLEEP_TIME=$SLEEP_TIME
 
 # used to set the problem pattern
 ARG APP_VERSION=1
