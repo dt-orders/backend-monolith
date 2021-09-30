@@ -1,4 +1,4 @@
-FROM openjdk:15
+FROM openjdk:11
 COPY target/*.jar .
 COPY ./MANIFEST /
 
@@ -10,5 +10,5 @@ ENV SLEEP_TIME=$SLEEP_TIME
 ARG APP_VERSION=1
 ENV APP_VERSION=$APP_VERSION
 
-CMD cat /MANIFEST && /usr/bin/java -Xmx400m -Xms400m -jar *.jar 
+CMD ["sh", "-c", "/usr/local/openjdk-11/bin/java -Xmx400m -Xms400m -jar *.jar"]
 EXPOSE 8080

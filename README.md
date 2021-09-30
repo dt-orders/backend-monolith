@@ -68,17 +68,18 @@ Taken from this [blog](https://mkyong.com/java/how-to-install-java-on-mac-osx)
 # install java
 brew update
 brew tap adoptopenjdk/openjdk
-brew install --cask adoptopenjdk14
+brew install --cask adoptopenjdk11
 java -version
 
 # edit profile
 vi ~/.bash_profile
-export JAVA_HOME_15=$(/usr/libexec/java_home -v15)
-export JAVA_HOME=$JAVA_HOME_15
+export JAVA_HOME_11=$(/usr/libexec/java_home -v11)
+export JAVA_HOME=$JAVA_HOME_11
 
 # reload profile
 source ~/.bash_profile
 
 # verify
 echo $JAVA_HOME
+java -version
 ```
